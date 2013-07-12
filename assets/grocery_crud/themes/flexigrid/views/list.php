@@ -18,13 +18,13 @@
 				<?php if(!$unset_delete || !$unset_edit || !empty($actions)){?>
 				<th align="left" abbr="tools" axis="col1" class="" width='20%'>
 					<div class="text-right">
-						<?php echo $this->l('list_actions'); ?>
+						<?php echo $this->l('list_actions');?>
 					</div>
 				</th>
 				<?php }?>
 			</tr>
 		</thead>		
-		<tbody>
+		<tbody>  
 <?php foreach($list as $num_row => $row){ ?>        
 		<tr  <?php if($num_row % 2 == 1){?>class="erow"<?php }?>>
 			<?php foreach($columns as $column){?>
@@ -43,20 +43,14 @@
                     <?php if(!$unset_edit){?>
 						<a href='<?php echo $row->edit_url?>' title='<?php echo $this->l('list_edit')?> <?php echo $subject?>' class="edit_button"><span class='edit-icon'></span></a>
 					<?php }?>
+                    
 					<?php 
 					if(!empty($row->action_urls)){
-						foreach($row->action_urls as $action_unique_id => $action_url){ 
-							$action = $actions[$action_unique_id];
-					?>
-							<a href="<?php echo $action_url; ?>" class="<?php echo $action->css_class; ?> crud-action" title="<?php echo $action->label?>"><?php 
-								if(!empty($action->image_url))
-								{
-									?><img src="<?php echo $action->image_url; ?>" alt="<?php echo $action->label?>" /><?php 	
-								}
-							?></a>		
-					<?php }
-					}
-					?>					
+						foreach($row->action_urls as $action_unique_id => $action_url):?>
+                        <? $attributes = "class=".$actions[$action_unique_id]->css_class; ?>
+                        <?=isset($action_url) ? anchor($action_url, $actions[$action_unique_id]->label, $attributes) : '';?>	
+					<? endforeach;?>
+					<? } ?>					
                     <div class='clear'></div>
 				</div>
 			</td>
