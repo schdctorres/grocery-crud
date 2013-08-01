@@ -243,7 +243,7 @@ class grocery_CRUD_Model  extends CI_Model  {
     }
 
     function get_relation_array($field_name , $related_table , $related_field_title, $where_clause, $order_by, $limit = null, $search_like = null)
-    {
+    {   
     	$relation_array = array();
     	$field_name_hash = $this->_unique_field_name($field_name);
 
@@ -347,7 +347,7 @@ class grocery_CRUD_Model  extends CI_Model  {
     }
 
     function get_relation_n_n_unselected_array($field_info, $selected_values)
-    {
+    {                    
     	$use_where_clause = !empty($field_info->where_clause);
 
     	$select = "";

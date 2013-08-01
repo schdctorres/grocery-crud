@@ -265,7 +265,7 @@ class grocery_CRUD_Field_Types
 				{
 					list($year,$month,$day) = explode("-",$value);
 
-					$value = date($this->php_date_format, mktime (0, 0, 0, (int)$month , (int)$day , (int)$year));
+					$value = date($this->php_date_format,  strtotime ($value));
 				}
 				else
 				{
@@ -275,10 +275,8 @@ class grocery_CRUD_Field_Types
 			case 'datetime':
 				if(!empty($value) && $value != '0000-00-00 00:00:00' && $value != '1970-01-01 00:00:00')
 				{
-					list($year,$month,$day) = explode("-",$value);
-					list($hours,$minutes) = explode(":",substr($value,11));
 
-					$value = date($this->php_date_format." - H:i", mktime ((int)$hours , (int)$minutes , 0, (int)$month , (int)$day ,(int)$year));
+					$value = date($this->php_date_format." - H:i", strtotime ($value));
 				}
 				else
 				{
@@ -402,7 +400,7 @@ class grocery_CRUD_Field_Types
 				case 'tinyint':
 				case 'mediumint':
 				case 'longint':
-					if( $db_type->db_type == 'tinyint' && $db_type->db_max_length ==  1)
+					if( isset($db_type->db_type) && $db_type->db_type == 'tinyint' && $db_type->db_max_length ==  1)
 						$type = 'true_false';
 					else
 						$type = 'integer';
@@ -1098,11 +1096,11 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 		$date_array = preg_split( '/[-\.\/ ]/', $date);
 		if($this->php_date_format == 'd/m/Y')
 		{
-			$sql_date = date('Y-m-d',mktime(0,0,0,$date_array[1],$date_array[0],$date_array[2]));
+			$sql_date = date('Y-m-d',strtotime($date));
 		}
 		elseif($this->php_date_format == 'm/d/Y')
 		{
-			$sql_date = date('Y-m-d',mktime(0,0,0,$date_array[0],$date_array[1],$date_array[2]));
+			$sql_date = date('Y-m-d',strtotime($date));
 		}
 		else
 		{
@@ -2211,7 +2209,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
 		if(!empty($value) && $value != '0000-00-00 00:00:00' && $value != '1970-01-01 00:00:00'){
 			list($year,$month,$day) = explode('-',substr($value,0,10));
-			$date = date($this->php_date_format, mktime(0,0,0,$month,$day,$year));
+			$date = date($this->php_date_format, strtotime($value));
 			$datetime = $date.substr($value,10);
 		}
 		else
@@ -2266,7 +2264,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		if(!empty($value) && $value != '0000-00-00' && $value != '1970-01-01')
 		{
 			list($year,$month,$day) = explode('-',substr($value,0,10));
-			$date = date($this->php_date_format, mktime(0,0,0,$month,$day,$year));
+			$date = date($this->php_date_format, strtotime($value));
 		}
 		else
 		{
