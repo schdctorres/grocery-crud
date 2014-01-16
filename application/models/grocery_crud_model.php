@@ -41,7 +41,7 @@ class grocery_CRUD_Model  extends CI_Model  {
     }
 
     function db_table_exists($table_name = null)
-    {
+    {   
     	return $this->db->table_exists($table_name);
     }
 

@@ -263,9 +263,7 @@ class grocery_CRUD_Field_Types
 			case 'date':
 				if(!empty($value) && $value != '0000-00-00' && $value != '1970-01-01')
 				{
-					list($year,$month,$day) = explode("-",$value);
-
-					$value = date($this->php_date_format,  strtotime ($value));
+					$value = date("Y-m-d",  strtotime ($value));
 				}
 				else
 				{
@@ -275,8 +273,7 @@ class grocery_CRUD_Field_Types
 			case 'datetime':
 				if(!empty($value) && $value != '0000-00-00 00:00:00' && $value != '1970-01-01 00:00:00')
 				{
-
-					$value = date($this->php_date_format." - H:i", strtotime ($value));
+					$value = date("Y-m-d H:i A", strtotime ($value));
 				}
 				else
 				{
@@ -469,7 +466,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 	}
 
 	protected function get_total_results()
-	{
+	{   
 		if(!empty($this->where))
 			foreach($this->where as $where)
 				$this->basic_model->where($where[0],$where[1],$where[2]);
@@ -534,7 +531,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 	}
 
 	protected function set_ajax_list_queries($state_info = null)
-	{
+	{   
 		if(!empty($state_info->per_page))
 		{
 			if(empty($state_info->page) || !is_numeric($state_info->page) )
@@ -1205,7 +1202,8 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 	}
 
 	protected function get_list()
-	{
+	{ 
+        //echo 'limit: '.print_r($this->limit);
 		if(!empty($this->order_by))
 			$this->basic_model->order_by($this->order_by[0],$this->order_by[1]);
 
@@ -1250,7 +1248,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 			}
 
 		}
-
+        
 		if($this->theme_config['crud_paging'] === true)
 		{
 			if($this->limit === null)
@@ -1305,6 +1303,10 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 	{
 		$this->basic_model->set_basic_table($table_name);
 	}
+    protected function set_additional_database($database = null)
+    {
+        $this->basic_model->set_additional_database($database);
+    }    
 
 	protected function upload_file($state_info)
 	{
@@ -1682,7 +1684,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	}
 
 	protected function showListInfo()
-	{
+	{ 
 		$this->set_echo_and_die();
 
 		$total_results = (int)$this->get_total_results();
@@ -1839,8 +1841,8 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	{
 		@ob_end_clean();
 		if($insert_result === false)
-		{
-			echo json_encode(array('success' => false));
+		{ 
+			echo json_encode(array('success' => false, 'error' => $this->l('insert_error')));
 		}
 		else
 		{
@@ -2208,7 +2210,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$this->set_js_config($this->default_javascript_path.'/jquery_plugins/config/jquery-ui-timepicker-addon.config.js');
 
 		if(!empty($value) && $value != '0000-00-00 00:00:00' && $value != '1970-01-01 00:00:00'){
-			list($year,$month,$day) = explode('-',substr($value,0,10));
 			$date = date($this->php_date_format, strtotime($value));
 			$datetime = $date.substr($value,10);
 		}
@@ -2263,7 +2264,6 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
 		if(!empty($value) && $value != '0000-00-00' && $value != '1970-01-01')
 		{
-			list($year,$month,$day) = explode('-',substr($value,0,10));
 			$date = date($this->php_date_format, strtotime($value));
 		}
 		else
@@ -2595,12 +2595,12 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
 			if(!isset($this->callback_add_field[$field->field_name]))
 			{
-				$field_input = $this->get_field_input($field_info, $field_value);
+				$field_input = $this->get_field_input($field_info,  strtoupper($field_value));
 			}
 			else
 			{
 				$field_input = $field_info;
-				$field_input->input = call_user_func($this->callback_add_field[$field->field_name], $field_value, null, $field_info);
+				$field_input->input = call_user_func($this->callback_add_field[$field->field_name],  strtoupper($field_value), null, $field_info);
 			}
 
 			switch ($field_info->crud_type) {
@@ -2637,13 +2637,13 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 			$field_value = !empty($field_values) && isset($field_values->{$field->field_name}) ? $field_values->{$field->field_name} : null;
 			if(!isset($this->callback_edit_field[$field->field_name]))
 			{
-				$field_input = $this->get_field_input($field_info, $field_value);
+				$field_input = $this->get_field_input($field_info, strtoupper($field_value));
 			}
 			else
 			{
 				$primary_key = $this->getStateInfo()->primary_key;
 				$field_input = $field_info;
-				$field_input->input = call_user_func($this->callback_edit_field[$field->field_name], $field_value, $primary_key, $field_info, $field_values);
+				$field_input->input = call_user_func($this->callback_edit_field[$field->field_name], strtoupper($field_value), $primary_key, $field_info, $field_values);
 			}
 
 			switch ($field_info->crud_type) {
@@ -3245,6 +3245,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 	protected $edit_hidden_fields 	= array();
 	protected $field_types 			= null;
 	protected $basic_db_table 		= null;
+    protected $additional_database  = "";
 	protected $theme_config 		= array();
 	protected $subject 				= null;
 	protected $subject_plural 		= null;
@@ -3885,7 +3886,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 					}
 
 				}
-
+                //echo $column." ".$this->display_as[$column]."<BR>";
 				if(isset($this->display_as[$column]))
 					$this->columns[$col_num] = (object)array('field_name' => $column, 'display_as' => $this->display_as[$column]);
 				elseif(isset($field_types[$column]))
@@ -4047,7 +4048,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 	public function limit($limit, $offset = '')
 	{
 		$this->limit = array($limit,$offset);
-
+        
 		return $this;
 	}
 
@@ -4119,8 +4120,10 @@ class Grocery_CRUD extends grocery_CRUD_States
 
 		if($this->basic_model === null)
 			$this->set_default_Model();
-
+            
+        $this->set_additional_database($this->get_extra_database());
 		$this->set_basic_db_table($this->get_table());
+        
 
 		$this->_load_date_format();
 
@@ -4586,6 +4589,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 	 */
 	public function get_table()
 	{
+        
 		if($this->basic_db_table_checked)
 		{
 			return $this->basic_db_table;
@@ -4594,7 +4598,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 		{
 			if(!$this->table_exists($this->basic_db_table))
 			{
-				throw new Exception('The table name does not exist. Please check you database and try again.',11);
+				throw new Exception('The table name '.$this->basic_db_table.' does not exist. Please check your database and try again.',11);
 				die();
 			}
 			$this->basic_db_table_checked = true;
@@ -4664,6 +4668,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 		if(!empty($table_name) && $this->basic_db_table === null)
 		{
 			$this->basic_db_table = $table_name;
+            $this->basic_db_table_checked = 1;
 		}
 		elseif(!empty($table_name))
 		{
@@ -4677,6 +4682,22 @@ class Grocery_CRUD extends grocery_CRUD_States
 
 		return $this;
 	}
+    /**
+     *
+     * Sets the extra database that we will get our data.
+     * @param string $table_name
+     * @return grocery_CRUD
+     */
+    public function set_extra_database($database)
+    {
+        if(!empty($database) && $this->additional_database === "")
+        {
+            $this->additional_database = $database;
+        }
+    }    
+    public function get_extra_database(){
+        return $this->additional_database;
+    }
 
 	/**
 	 * Set a full URL path to this method.
