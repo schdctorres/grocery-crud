@@ -2592,15 +2592,15 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 			$field_info = $types[$field->field_name];
 
 			$field_value = !empty($field_values) && isset($field_values->{$field->field_name}) ? $field_values->{$field->field_name} : null;
-
+            is_string($field_value) ? $field_value = strtoupper($field_value) : '';
 			if(!isset($this->callback_add_field[$field->field_name]))
 			{
-				$field_input = $this->get_field_input($field_info,  strtoupper($field_value));
+				$field_input = $this->get_field_input($field_info,  $field_value);
 			}
 			else
 			{
 				$field_input = $field_info;
-				$field_input->input = call_user_func($this->callback_add_field[$field->field_name],  strtoupper($field_value), null, $field_info);
+				$field_input->input = call_user_func($this->callback_add_field[$field->field_name],  $field_value, null, $field_info);
 			}
 
 			switch ($field_info->crud_type) {
@@ -2635,15 +2635,17 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 			$field_info = $types[$field->field_name];
 
 			$field_value = !empty($field_values) && isset($field_values->{$field->field_name}) ? $field_values->{$field->field_name} : null;
+            is_string($field_value) ? $field_value = strtoupper($field_value) : '';
+            
 			if(!isset($this->callback_edit_field[$field->field_name]))
 			{
-				$field_input = $this->get_field_input($field_info, strtoupper($field_value));
+				$field_input = $this->get_field_input($field_info, $field_value);
 			}
 			else
 			{
 				$primary_key = $this->getStateInfo()->primary_key;
 				$field_input = $field_info;
-				$field_input->input = call_user_func($this->callback_edit_field[$field->field_name], strtoupper($field_value), $primary_key, $field_info, $field_values);
+				$field_input->input = call_user_func($this->callback_edit_field[$field->field_name], $field_value, $primary_key, $field_info, $field_values);
 			}
 
 			switch ($field_info->crud_type) {
