@@ -1860,7 +1860,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
             }else{
                 $this->dbErrorMessage = $this->l('insert_error');
             }              
-			echo json_encode(array('success' => false, 'error' => 'DB ERROR: '.$this->dbErrorMessage));
+			echo json_encode(array('success' => false, 'error_message' => 'DB ERROR: '.$this->dbErrorMessage));
 		}
 		else
 		{
