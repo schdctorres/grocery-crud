@@ -69,7 +69,8 @@ $(function(){
 								}
 								else
 								{
-									alert( message_insert_error );
+									alert( data.error );
+                                    form_error_message( data.error );
 								}
 							},
 							error: function(){
