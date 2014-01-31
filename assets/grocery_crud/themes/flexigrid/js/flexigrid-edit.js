@@ -67,10 +67,12 @@ $(function(){
 							}
 							else
 							{
-								form_error_message(message_update_error);
+                                alert( data.error_message );
+                                form_error_message( data.error_message );
 							}
 						},
 						error: function(){
+                            alert( message_insert_error );
 							form_error_message( message_update_error );
 						}
 					});

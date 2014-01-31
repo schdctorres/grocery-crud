@@ -861,7 +861,6 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 					if(!empty($callback_return) && is_array($callback_return))
 						$post_data = $callback_return;
 					elseif($callback_return === false)
-                        $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
 						return false;
 				}
 
@@ -934,7 +933,6 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 					if($callback_return === false)
 					{
-                        $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
 						return false;
 					}
 
@@ -946,7 +944,9 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
  
 					if($callback_return === false)  
 					{  
-                        $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
+                        if($this->basic_model->db->mssqlErrMsgArray){
+                            $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
+                        }
 						return false;
 					}
 			}
@@ -971,9 +971,8 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 		{
 			$post_data 		= $state_info->unwrapped_data;
 			$primary_key 	= $state_info->primary_key;
-
-			if($this->callback_update === null)
-			{
+            
+			if($this->callback_update === null){
 				if($this->callback_before_update !== null)
 				{
 					$callback_return = call_user_func($this->callback_before_update, $post_data, $primary_key);
@@ -984,7 +983,6 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 					}
 					elseif($callback_return === false)
 					{
-                        $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
 						return false;
 					}
 
@@ -1056,33 +1054,31 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 				if($this->callback_after_update !== null)
 				{
+                    echo $this->basic_model->db->mssqlErrMsgArray; die();
 					$callback_return = call_user_func($this->callback_after_update, $post_data, $primary_key);
 
 					if($callback_return === false)
 					{
-                        $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
 						return false;
 					}
 
 				}
-			}
-			else
-			{
+			}else{
+
 				$callback_return = call_user_func($this->callback_update, $post_data, $primary_key);
 
 				if($callback_return === false)
 				{
-                    $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
+                    if($this->basic_model->db->mssqlErrMsgArray){
+                        $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;  
+                    }
 					return false;
 				}
 			}
 
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
 	protected function _convert_date_to_sql_date($date)
@@ -1154,7 +1150,6 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 				if($callback_return === false)
 				{
-                    $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
 					return false;
 				}
 
@@ -1181,7 +1176,6 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 				if($callback_return === false)
 				{
-                    $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
 					return false;
 				}
 
@@ -1193,7 +1187,9 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 			if($callback_return === false)
 			{
-                $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
+                if($this->basic_model->db->mssqlErrMsgArray){
+                    $this->dbErrorMsgArray = $this->basic_model->db->mssqlErrMsgArray;
+                }
 				return false;
 			}
 		}
@@ -1817,9 +1813,16 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		@ob_end_clean();
 		if($delete_result === false)
 		{
-			$error_message = '<p>'.$this->l('delete_error_message').'</p>';
+            if(!empty($this->dbErrorMsgArray)){                       
+                $this->dbErrorMessage = implode(" ",$this->dbErrorMsgArray);
+            }else{
+                $this->dbErrorMessage = $this->l('insert_error');
+            }              
+            echo json_encode(array('success' => $delete_result, 'error_message' => 'DB ERROR: '.$this->dbErrorMessage));
+                        
+			//$error_message = '<p>'.$this->l('delete_error_message').'</p>';
 
-			echo json_encode(array('success' => $delete_result ,'error_message' => $error_message));
+			//echo json_encode(array('success' => $delete_result ,'error_message' => $error_message));
 		}
 		else
 		{
@@ -2092,12 +2095,10 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	protected function update_layout($update_result = false, $state_info = null)
 	{
 		@ob_end_clean();
-		if($update_result === false)
-		{
-			echo json_encode(array('success' => $update_result));
-		}
-		else
-		{
+        
+        if(!empty($this->basic_model->db->mssqlErrMsgArray)){             
+            echo json_encode(array('success' => false, 'error_message' => 'DB ERROR: '.implode(", ", $this->basic_model->db->mssqlErrMsgArray)));     
+        }else{
 			$success_message = '<p>'.$this->l('update_success_message');
 			if(!$this->unset_back_to_list && !$this->_is_ajax())
 			{
@@ -2105,7 +2106,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 			}
 			$success_message .= '</p>';
 
-			/* The textarea is only because of a BUG of the jquery form plugin with the combination of multipart forms */
+			// The textarea is only because of a BUG of the jquery form plugin with the combination of multipart forms
 			echo "<textarea>".json_encode(array(
 					'success' => true ,
 					'insert_primary_key' => $update_result,
