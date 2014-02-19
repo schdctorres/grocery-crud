@@ -1477,7 +1477,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	private $views_as_string			= '';
 	private $echo_and_die				= false;
 	protected $theme 					= null;
-	protected $default_true_false_text 	= array('inactive' , 'active');
+	protected $default_true_false_text 	= array('INACTIVE' , 'ACTIVE');
 
 	protected $css_files				= array();
 	protected $js_files					= array();
@@ -2130,6 +2130,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 
 	protected function get_true_false_input($field_info,$value)
 	{
+        isset($field_info->default) ? "" : $field_info->default='1';
 		$this->set_css($this->default_css_path.'/jquery_plugins/uniform/uniform.default.css');
 		$this->set_js_lib($this->default_javascript_path.'/jquery_plugins/jquery.uniform.min.js');
 		$this->set_js_config($this->default_javascript_path.'/jquery_plugins/config/jquery.uniform.config.js');
