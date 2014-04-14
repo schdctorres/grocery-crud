@@ -45,6 +45,9 @@ $(function(){
 								data = $.parseJSON( result );
 								if(data.success)
 								{
+                                    if(result.statusText == "error"){
+                                        window.location.replace("/authenticate");
+                                    }                                     
 									var data_unique_hash = my_crud_form.closest(".flexigrid").attr("data-unique-hash");
 
 									$('.flexigrid[data-unique-hash='+data_unique_hash+']').find('.ajax_refresh_and_loading').trigger('click');
@@ -73,7 +76,10 @@ $(function(){
                                     form_error_message( data.error_message );
 								}
 							},
-							error: function(){
+							error: function(result){
+                                if(result.statusText == "error"){
+                                    window.location.replace("/authenticate");
+                                }                                 
 								alert( message_insert_error );
 								$("#FormLoading").hide();
 							}

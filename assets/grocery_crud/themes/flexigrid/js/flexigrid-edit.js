@@ -42,7 +42,9 @@ $(function(){
 							$("#FormLoading").show();
 						},
 						success: function(result){
-
+                            if(result.statusText == "error"){
+                                window.location.replace("/authenticate");
+                            } 
 							$("#FormLoading").fadeOut("slow");
 							data = $.parseJSON( result );
 							if(data.success)
@@ -71,7 +73,10 @@ $(function(){
                                 form_error_message( data.error_message );
 							}
 						},
-						error: function(){
+						error: function(msg){
+                            if(msg.statusText == "error"){
+                                window.location.replace("/authenticate");
+                            }                             
                             alert( message_insert_error );
 							form_error_message( message_update_error );
 						}

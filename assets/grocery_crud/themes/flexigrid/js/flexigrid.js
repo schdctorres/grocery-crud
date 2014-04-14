@@ -140,7 +140,7 @@ $(function(){
 		var delete_url = $(this).attr('href');
 
 		var this_container = $(this).closest('.flexigrid');
-
+        
 		if( confirm( message_alert_delete ) )
 		{
 			$.ajax({
@@ -148,7 +148,9 @@ $(function(){
 				dataType: 'json',
 				success: function(data)
 				{
-					if(data.success)
+                    console.log(data);
+
+					if(data.success_message)
 					{
 						this_container.find('.ajax_refresh_and_loading').trigger('click');
 
@@ -159,7 +161,16 @@ $(function(){
 						error_message(data.error_message);
 
 					}
-				}
+				},
+                error: function(msg){
+                    console.log(msg);
+                    if(msg.statusText == "error"){
+                        window.location.replace("/authenticate");
+                    }                    
+                    if(msg.responseText){
+                        error_message(msg.responseText);
+                    }
+                }
 			});
 		}
 

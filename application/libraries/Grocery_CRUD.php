@@ -86,7 +86,7 @@ class grocery_CRUD_Field_Types
 						$field_info->extras = 'text_editor';
 				break;
 
-				case 'relation':
+				case 'relation': 
 					$field_info->extras 	= $this->relation[$field_info->name];
 				break;
 
@@ -1054,7 +1054,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 
 				if($this->callback_after_update !== null)
 				{
-                    echo $this->basic_model->db->mssqlErrMsgArray; die();
+                    //echo $this->basic_model->db->mssqlErrMsgArray; die();
 					$callback_return = call_user_func($this->callback_after_update, $post_data, $primary_key);
 
 					if($callback_return === false)
@@ -1740,7 +1740,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		{
 			foreach($output_columns as $column)
 			{
-				$field_name 	= $column->field_name;
+				$field_name 	= $column->field_name;  
 				$field_value 	= isset( $row->{$column->field_name} ) ? $row->{$column->field_name} : null;
 				if( $has_callbacks && isset($this->callback_column[$field_name]) )
 					$list[$num_row]->$field_name = call_user_func($this->callback_column[$field_name], $field_value, $row);
@@ -1809,27 +1809,23 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	}
 
 	protected function delete_layout($delete_result = true)
-	{
+	{ 
 		@ob_end_clean();
+        $this->dbErrorMessage = $this->l('delete_success_message');
+        $returnArray['success'] = $delete_result; 
+        
 		if($delete_result === false)
 		{
-            if(!empty($this->dbErrorMsgArray)){                       
-                $this->dbErrorMessage = implode(" ",$this->dbErrorMsgArray);
-            }else{
-                $this->dbErrorMessage = $this->l('insert_error');
-            }              
-            echo json_encode(array('success' => $delete_result, 'error_message' => 'DB ERROR: '.$this->dbErrorMessage));
-                        
-			//$error_message = '<p>'.$this->l('delete_error_message').'</p>';
-
-			//echo json_encode(array('success' => $delete_result ,'error_message' => $error_message));
+            if(!empty($this->basic_model->db->mssqlErrMsgArray)){                       
+                is_array($this->basic_model->db->mssqlErrMsgArray) ? $this->dbErrorMessage .= implode("<br>",$this->basic_model->db->mssqlErrMsgArray) : $this->dbErrorMessage .= "<br>".$this->basic_model->db->mssqlErrMsgArray;
+            }
+            $returnArray['error_message'] = $this->dbErrorMessage;
 		}
 		else
 		{
-			$success_message = '<p>'.$this->l('delete_success_message').'</p>';
-
-			echo json_encode(array('success' => true , 'success_message' => $success_message));
-		}
+			$returnArray['success_message'] = 'Record removed successfully';
+		}  
+        echo json_encode($returnArray);
 		$this->set_echo_and_die();
 	}
 
@@ -1855,15 +1851,16 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	protected function insert_layout($insert_result = false)
 	{
 		@ob_end_clean();
+        $returnArray['success'] = $insert_result;
 		if($insert_result === false)
 		{ 
 
-            if(!empty($this->dbErrorMsgArray)){                       
-                $this->dbErrorMessage = implode(" ",$this->dbErrorMsgArray);
+            if(!empty($this->basic_model->db->mssqlErrMsgArray)){                       
+                $returnArray['error_message'] = $this->basic_model->db->mssqlErrMsgArray;
             }else{
-                $this->dbErrorMessage = $this->l('insert_error');
+                $returnArray['error_message'] = $this->l('insert_error');
             }              
-			echo json_encode(array('success' => false, 'error_message' => 'DB ERROR: '.$this->dbErrorMessage));
+			echo json_encode($returnArray);
 		}
 		else
 		{
@@ -1905,40 +1902,29 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	protected function upload_layout($upload_result, $field_name)
 	{
 		@ob_end_clean();
+        $returnArray['success'] = $upload_result;
 		if($upload_result !== false && !is_string($upload_result) && empty($upload_result[0]->error))
 		{
-			echo json_encode(
-					(object)array(
-							'success' => true,
-							'files'	=> $upload_result
-					));
+            $returnArray['files'] =  $upload_result;
+			
 		}
 		else
 		{
-			$result = (object)array('success' => false);
 			if(is_string($upload_result))
-				$result->message = $upload_result;
+				$returnArray['message'] = $upload_result;
 			if(!empty($upload_result[0]->error))
-				$result->message = $upload_result[0]->error;
+				$returnArray['message'] = $upload_result[0]->error;
 
-			echo json_encode($result);
 		}
-
+        echo json_encode( $returnArray );
 		$this->set_echo_and_die();
 	}
 
 	protected function delete_file_layout($upload_result)
 	{
 		@ob_end_clean();
-		if($upload_result !== false)
-		{
-			echo json_encode( (object)array( 'success' => true ) );
-		}
-		else
-		{
-			echo json_encode((object)array('success' => false));
-		}
-
+        $returnArray['success'] = $upload_result;
+        echo json_encode( (object) $returnArray );
 		$this->set_echo_and_die();
 	}
 
@@ -2096,8 +2082,10 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	{
 		@ob_end_clean();
         
-        if(!empty($this->basic_model->db->mssqlErrMsgArray)){             
-            echo json_encode(array('success' => false, 'error_message' => 'DB ERROR: '.implode(", ", $this->basic_model->db->mssqlErrMsgArray)));     
+        if(!empty($this->basic_model->db->mssqlErrMsgArray)){ 
+            $returnArray['success'] = $update_result;            
+            $returnArray['error_message'] = implode("<br> ", $this->basic_model->db->mssqlErrMsgArray);            
+            echo json_encode($returnArray);     
         }else{
 			$success_message = '<p>'.$this->l('update_success_message');
 			if(!$this->unset_back_to_list && !$this->_is_ajax())
@@ -3856,14 +3844,13 @@ class Grocery_CRUD extends grocery_CRUD_States
 						$this->columns[] = $field->name;
 				}
 			}
-
+            //print_r($this->relation);
 			foreach($this->columns as $col_num => $column)
 			{
-
 				if(isset($this->relation[$column]))
 				{
 
-					$new_column = $this->_unique_field_name($this->relation[$column][0]);
+					$new_column = $this->_unique_field_name($this->relation[$column][0]);  
 					$this->columns[$col_num] = $new_column;
 
 					if(isset($this->display_as[$column]))
@@ -3881,15 +3868,16 @@ class Grocery_CRUD extends grocery_CRUD_States
 					$this->columns[$col_num] = $new_column;
 				}
 				else
-				{
+				{    
 					if(!empty($this->relation))
 					{
 						$table_name  = $this->get_table();
+                        
 						foreach($this->relation as $relation)
 						{
 							if( $relation[2] == $column )
-							{
-								$new_column = $table_name.'.'.$column;
+							{    
+                                $new_column = $this->_unique_field_name($relation[0]);
 								if(isset($this->display_as[$column]))
 								{
 									$display_as = $this->display_as[$column];
@@ -4801,7 +4789,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 	 * @param string $order_by
 	 */
 	public function set_relation($field_name , $related_table, $related_title_field, $where_clause = null, $order_by = null)
-	{
+	{  
 		$this->relation[$field_name] = array($field_name, $related_table,$related_title_field, $where_clause, $order_by);
 		return $this;
 	}
