@@ -507,7 +507,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 				}
 			}
 
-		}
+		}   
 
 		return $this->basic_model->get_total_results();
 	}
@@ -549,20 +549,32 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 		}
 
 		if(!empty($state_info->search))
-		{
+		{  
 			if(!empty($this->relation))
-				foreach($this->relation as $relation_name => $relation_values)
+            
+				foreach($this->relation as $relation_name => $relation_values) {
+                    /*
+                    echo "name: ".$relation_name."<BR>";
+                    echo "<pre>".print_r($relation_values)."</pre>";
+                    echo "unique field name: ".$this->_unique_field_name($relation_name)."<BR>";
+                    echo "get_field_names_to_search: ".$this->_get_field_names_to_search($relation_values)."<BR>";
+                    */                               
 					$temp_relation[$this->_unique_field_name($relation_name)] = $this->_get_field_names_to_search($relation_values);
+                }
 
 			if($state_info->search->field !== null)
 			{
+                
 				if(isset($temp_relation[$state_info->search->field]))
 				{
-					if(is_array($temp_relation[$state_info->search->field]))
-						foreach($temp_relation[$state_info->search->field] as $search_field)
+                    //echo "IS relation";
+					if(is_array($temp_relation[$state_info->search->field])){
+						foreach($temp_relation[$state_info->search->field] as $search_field){
 							$this->or_like($search_field , $state_info->search->text);
-					else
+                        }
+					}else{  
 						$this->like($temp_relation[$state_info->search->field] , $state_info->search->text);
+                    }
 				}
 				elseif(isset($this->relation_n_n[$state_info->search->field]))
 				{
@@ -571,7 +583,15 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 				}
 				else
 				{
-					$this->like($state_info->search->field , $state_info->search->text);
+                    if($this->basic_model->table_name){
+                        $search_field = $this->basic_model->table_name.'.'.$state_info->search->field;
+                    }else{
+                        $search_field = $state_info->search->field;
+                    }
+                    if($addDbName = $this->basic_model->get_additional_database()){
+                        $search_field = $addDbName.$search_field;
+                    }                   
+					$this->like( $search_field, $state_info->search->text);
 				}
 			}
 			else
@@ -676,11 +696,15 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 			foreach($add_fields as $add_field)
 			{
 				$field_name = $add_field->field_name;
+                $unique_field_name = $add_field->field_name;
 				if(in_array( $field_name, $unique_fields) )
 				{
+                    if($this->basic_db_table){
+                        $unique_field_name = $this->basic_db_table.'.'.$field_name; 
+                    }
 					$form_validation->set_rules( $field_name,
 							$field_types[$field_name]->display_as,
-							'is_unique['.$this->basic_db_table.'.'.$field_name.']');
+							'is_unique['.$unique_field_name.']');
 				}
 			}
 
@@ -790,9 +814,13 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 					$previous_field_name_value = $row->$field_name;
 
 					if(!empty($previous_field_name_value) && $previous_field_name_value != $field_name_value) {
+                        $unique_field_name = $field_name;
+                        if($this->basic_db_table){
+                            $unique_field_name = $this->basic_db_table.'.'.$field_name; 
+                        }                        
 						$form_validation->set_rules( $field_name,
 								$field_types[$field_name]->display_as,
-								'is_unique['.$this->basic_db_table.'.'.$field_name.']');
+								'is_unique['.$unique_field_name.']');
 
 						$form_validation_check = true;
 					}
@@ -1111,7 +1139,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 	}
 
 	protected function _get_field_names_to_search(array $relation_values)
-	{
+	{ 
 		if(!strstr($relation_values[2],'{'))
 			return $this->_unique_join_name($relation_values[0]).'.'.$relation_values[2];
 		else
@@ -1221,7 +1249,7 @@ class grocery_CRUD_Model_Driver extends grocery_CRUD_Field_Types
 			foreach($this->or_where as $or_where)
 				$this->basic_model->or_where($or_where[0],$or_where[1],$or_where[2]);
 
-		if(!empty($this->like))
+		if(!empty($this->like))  
 			foreach($this->like as $like)
 				$this->basic_model->like($like[0],$like[1],$like[2]);
 
@@ -1507,7 +1535,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 		$data->list = $this->change_list($data->list , $data->types);
 		$data->list = $this->change_list_add_actions($data->list);
 
-		$data->total_results = $this->get_total_results();
+		$data->total_results = $this->get_total_results();  
 
 		$data->columns 				= $this->get_columns();
 
@@ -1695,7 +1723,7 @@ class grocery_CRUD_Layout extends grocery_CRUD_Model_Driver
 	{ 
 		$this->set_echo_and_die();
 
-		$total_results = (int)$this->get_total_results();
+		$total_results = (int)$this->get_total_results();  
 		@ob_end_clean();
 		echo json_encode(array('total_results' => $total_results));
 		die();
@@ -4028,7 +4056,7 @@ class Grocery_CRUD extends grocery_CRUD_States
 	}
 
 	public function like($field, $match = '', $side = 'both')
-	{
+	{   
 		$this->like[] = array($field, $match, $side);
 
 		return $this;

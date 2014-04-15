@@ -1,7 +1,6 @@
 <?php 
 
 	$column_width = (int)(80/count($columns));
-	
 	if(!empty($list)){
 ?><div class="bDiv" >
 		<table cellspacing="0" cellpadding="0" border="0" id="flex1">
@@ -16,7 +15,7 @@
 				</th>
 				<?php }?>
 				<?php if(!$unset_delete || !$unset_edit || !empty($actions)){?>
-				<th align="left" abbr="tools" axis="col1" class="" width='20%'>
+				<th align="left" abbr="tools" axis="col1" class="actionCol" width='20%'>
 					<div class="text-right">
 						<?php echo $this->l('list_actions');?>
 					</div>
@@ -33,7 +32,7 @@
 			</td>
 			<?php }?>
 			<?php if(!$unset_delete || !$unset_edit || !empty($actions)){?>
-			<td align="left" width='20%'>
+			<td align="left" width='20%' class='actionCol'>
 				<div class='tools'>				
 					<?php if(!$unset_delete){?>
                     	<a href='<?php echo $row->delete_url?>' title='<?php echo $this->l('list_delete')?> <?php echo $subject?>' class="delete-row" >
@@ -59,6 +58,7 @@
 <?php } ?>        
 		</tbody>
 		</table>
+<div style=" width:100%;border:1px solid #CCCCCC;text-align:center; font-weight:bold;"><?=$total_results?> RECORDS FOUND</div>        
 	</div>
 <?php }else{?>
 	<br/>
