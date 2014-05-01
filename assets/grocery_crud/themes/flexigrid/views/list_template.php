@@ -57,15 +57,10 @@ if($success_message !== null){?>
 	<div class="tDiv">
 		<?php if(!$unset_add){?>
 		<div class="tDiv2">
-        	<a href='<?php echo $add_url?>' title='<?php echo $this->l('list_add'); ?> <?php echo $subject?>' class='add-anchor add_button'>
-			<div class="fbutton">
-				<div>
-					<span class="add"><?php echo $this->l('list_add'); ?> <?php echo $subject?></span>
-				</div>
-			</div>
-            </a>
-			<div class="btnseparator">
-			</div>
+            <a class="add-anchor add_button btn btn-default btn-sm" role="button" href="<?=$add_url?>" title="Add New Rcord">
+            <span class=" glyphicon glyphicon-plus"></span>
+            <span>ADD NEW RECORD</span>
+            </a>        
 		</div>
 		<?php }?>
 		<div class="tDiv3">

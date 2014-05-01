@@ -7,6 +7,11 @@ $(function(){
 
 		$('#crudForm').trigger('submit');
 	});
+	
+	$('.save-and-return').click(function(){
+		save_and_close = true;
+		$('#crudForm').trigger('submit');
+	});
 
 	$('#crudForm').submit(function(){
 		$(this).ajaxSubmit({
