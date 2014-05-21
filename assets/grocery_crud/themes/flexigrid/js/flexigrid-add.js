@@ -53,7 +53,7 @@ $(function(){
 									$('.flexigrid[data-unique-hash='+data_unique_hash+']').find('.ajax_refresh_and_loading').trigger('click');
 
 									if(save_and_close)
-									{
+									{         
 										if ($('#save-and-go-back-button').closest('.ui-dialog').length === 0) {
 											window.location = data.success_list_url;
 										} else {

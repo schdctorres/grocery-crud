@@ -18,7 +18,7 @@ $(function(){
 	$('#save-and-go-back-button').click(function(){
 		save_and_close = true;
 
-		$('#crudForm').trigger('submit');
+		$('#crudForm').submit();
 	});
 
 	$('#crudForm').submit(function(){
@@ -55,6 +55,7 @@ $(function(){
 
 								if(save_and_close)
 								{
+                                    //alert(data.success_list_url)
 									if ($('#save-and-go-back-button').closest('.ui-dialog').length === 0) {
 										window.location = data.success_list_url;
 									} else {

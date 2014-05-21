@@ -59,7 +59,7 @@ if($success_message !== null){?>
 		<div class="tDiv2">
             <a class="add-anchor add_button btn btn-default btn-sm" role="button" href="<?=$add_url?>" title="Add New Rcord">
             <span class=" glyphicon glyphicon-plus"></span>
-            <span>ADD NEW RECORD</span>
+            <span><?=$addBtn?></span>
             </a>        
 		</div>
 		<?php }?>
