@@ -245,7 +245,7 @@ $(function(){
 			if(cookie_search_text !== '')
 				$('#quickSearchButton').trigger('click');
 
-			$('#filtering_form').trigger('submit');
+			//$('#filtering_form').trigger('submit');
 		}
 	}
 

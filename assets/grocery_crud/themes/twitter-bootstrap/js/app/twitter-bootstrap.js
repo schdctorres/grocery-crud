@@ -79,12 +79,12 @@ $(function(){
 				});
 			 }
 		});
-		//	Criando os cookies para a paginacao
-		createCookie('crud_page_'+unique_hash, crud_page, 1);
+		//	Criando os cookies para a paginacao                
+		createCookie('crud_page_'+unique_hash, crud_page, 1); 
 		createCookie('per_page_'+unique_hash, $('#per_page').val(), 1);
 		createCookie('hidden_ordering_'+unique_hash, $('#hidden-ordering').val(), 1);
 		createCookie('hidden_sorting_'+unique_hash, $('#hidden-sorting').val(), 1);
-		createCookie('search_text_'+unique_hash, $('#search_text').val(), 1);
+		createCookie('search_text_'+unique_hash, $('#search_text').val(), 1);   
 		createCookie('search_field_'+unique_hash, $('#search_field').val(), 1);
 
 		$('#ajax-loading').addClass('hide');
@@ -198,7 +198,7 @@ $(function(){
 	;
 
 	if(cookie_crud_page !== null && cookie_per_page !== null)
-	{
+	{  
 		$('#crud_page').val(cookie_crud_page);
 		$('#per_page').val(cookie_per_page);
 		$('#hidden-ordering').val(hidden_ordering);
