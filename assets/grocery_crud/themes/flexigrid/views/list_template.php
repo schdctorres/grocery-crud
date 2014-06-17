@@ -93,6 +93,11 @@ if($success_message !== null){?>
 		<?php echo $list_view?>
 	</div>
 	<?php echo form_open( $ajax_list_url, 'method="post" id="filtering_form" class="filtering_form" autocomplete = "off" data-ajax-list-info-url="'.$ajax_list_info_url.'"'); ?>
+    <?php if( $whereArray ):?>
+        <?php foreach($whereArray as $rowArray):?>
+        <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>">
+        <?php endforeach;?>
+    <?php endif;?>
 	<div class="sDiv quickSearchBox" id='quickSearchBox'>
 		<div class="sDiv2">
 			<?php echo $this->l('list_search');?>: <input type="text" class="qsbsearch_fieldox search_text" name="search_text" size="30" id='search_text'>
