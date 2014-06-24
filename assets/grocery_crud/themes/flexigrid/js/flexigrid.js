@@ -45,9 +45,11 @@ $(function(){
 			 url: ajax_list_info_url,
 			 dataType: 'json',
 			 beforeSend: function(){
+                 $('#smallModal').modal('show');
 				 this_form.closest('.flexigrid').find('.ajax_refresh_and_loading').addClass('loading');
 			 },
 			 complete: function(){
+                 $('#smallModal').modal('hide');
 				 this_form.closest('.flexigrid').find('.ajax_refresh_and_loading').removeClass('loading');
 			 },
 			 success:    function(data){
