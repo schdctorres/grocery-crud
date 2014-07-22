@@ -1,20 +1,29 @@
-<?php 
-
-	$column_width = (int)(80/count($columns));
+<?php
+	$column_width = (int)(92/count($columns));
 	if(!empty($list)){
-?><div class="bDiv" >
+?>
+<style>
+.GC_columns{
+    width: <?=$column_width?>%;
+}
+#GC_list_actions, #GC_col_ACTIONS{
+    text-align:left; 
+    width:8%;
+}
+</style>
+<div class="bDiv" >
 		<table cellspacing="0" cellpadding="0" border="0" id="flex1">
 		<thead>
 			<tr class='hDiv'>
                 <?php if(!$unset_delete || !$unset_edit || !empty($actions)){?>
-                <th style='text-align:left; width:8%;' abbr="tools" axis="col1" class="actionCol">
+                <th abbr="tools" axis="col1" class="actionCol" id="GC_list_actions">
                     <div class="text-left">
                         <?php echo $this->l('list_actions');?>
                     </div>
                 </th>
                 <?php }?>
 				<?php foreach($columns as $column){?>
-				<th width='<?php echo $column_width?>%'>
+				<th class="GC_columns" id='GC_col_<?php echo $column->field_name?>'>
 					<div class="text-left field-sorting <?php if(isset($order_by[0]) &&  $column->field_name == $order_by[0]){?><?php echo $order_by[1]?><?php }?>" 
 						rel='<?php echo $column->field_name?>'>
 						<?php echo $column->display_as?>
@@ -27,7 +36,7 @@
 <?php foreach($list as $num_row => $row){ ?>        
 		<tr  <?php if($num_row % 2 == 1){?>class="erow"<?php }?>>
             <?php if(!$unset_delete || !$unset_edit || !empty($actions)){?>
-            <td style='text-align:left;' class='actionCol'>
+            <td class='actionCol text-left'>
                 <div class='tools'>                
                     <?php if(!$unset_delete){?>
                     <a class="btn btn-default btn-sm delete-row deleteBtn" role="button" href="<?php echo $row->delete_url?>" title="Delete Record">
@@ -52,7 +61,7 @@
             </td>
             <?php }?>        
 			<?php foreach($columns as $column){?>
-			<td width='<?php echo $column_width?>%' class='<?php if(isset($order_by[0]) &&  $column->field_name == $order_by[0]){?>sorted<?php }?>'>
+			<td class='<?php if(isset($order_by[0]) &&  $column->field_name == $order_by[0]){?>sorted<?php }?>'>
 				<div class='text-left'><?php echo $row->{$column->field_name} != '' ? $row->{$column->field_name} : '&nbsp;' ; ?></div>
 			</td>
 			<?php }?>
