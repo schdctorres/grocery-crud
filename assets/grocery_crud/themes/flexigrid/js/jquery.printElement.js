@@ -50,7 +50,7 @@
         * 3 : array of strings with paths to alternate css files (optimized for print)
         */
         "printBodyOptions": {
-            "styleToAdd": 'padding:10px;margin:10px;', //style attributes to add to the body of print document
+            "styleToAdd": 'padding:4px;margin:4px;', //style attributes to add to the body of print document
             "classNameToAdd": '' //css class to add to the body of print document
         },
         "leaveOpen": false, // in case of popup, leave the print page open or not

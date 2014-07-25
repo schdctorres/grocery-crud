@@ -34,7 +34,7 @@
     <?php setcookie('unique_hash', $unique_hash); ?> 
 	var message_alert_delete = "<?php echo $this->l('alert_delete'); ?>";
 
-</script>
+</script>  
 <div id='list-report-error' class='report-div error'></div>
 <div id='list-report-success' class='report-div success report-list' <?php if($success_message !== null){?>style="display:block"<?php }?>><?php
 if($success_message !== null){?>
@@ -84,6 +84,16 @@ if($success_message !== null){?>
             </a>
 			<div class="btnseparator"></div>
 			<?php }?>
+            <?php if($viewprint) { ?>
+            <a href="<?php echo $print_url; ?>" target="new">
+                <div class="fbutton">
+                    <div>            
+                    <span class="glyphicon glyphicon-print"></span>&nbsp; Print View
+                    </div>
+                </div>
+            </a>
+            <div class="btnseparator"></div>
+            <?php }?>            
 		</div>
 		<div class='clear'></div>
 	</div>
