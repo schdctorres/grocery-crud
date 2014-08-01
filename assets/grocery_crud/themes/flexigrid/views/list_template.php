@@ -44,8 +44,8 @@ if($success_message !== null){?>
 <div class="flexigrid" style='width: 100%;' data-unique-hash="<?php echo $unique_hash; ?>">
 	<div id="hidden-operations" class="hidden-operations"></div>
 	<div class="mDiv">
-		<div class="ftitle">
-			&nbsp;
+		<div class="pull-right">
+			<?=isset($keyView) ? $keyView : '&nbsp;';?>
 		</div>
 		<div title="<?php echo $this->l('minimize_maximize');?>" class="ptogtitle">
 			<span></span>
