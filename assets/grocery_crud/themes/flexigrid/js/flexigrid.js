@@ -28,7 +28,7 @@ $(function(){
 
 	$('.filtering_form').submit(function(){
 		var crud_page =  parseInt($(this).closest('.flexigrid').find('.crud_page').val(), 10);
-		var last_page = parseInt($(this).closest('.flexigrid').find('.last-page-number').html(), 10);
+		var last_page = parseInt($(this).closest('.flexigrid').find('#last-page-number-hidden').val(), 10);
 
 		if (crud_page > last_page) {
 			$(this).closest('.flexigrid').find('.crud_page').val(last_page);
@@ -112,13 +112,15 @@ $(function(){
 	});
 
 	$('.last-button').click(function(){
-		$(this).closest('.flexigrid').find('.crud_page').val( $(this).closest('.flexigrid').find('.last-page-number').html());
+		$(this).closest('.flexigrid').find('.crud_page').val( $(this).closest('.flexigrid').find('#last-page-number-hidden').val());
 		$(this).closest('.flexigrid').find('.filtering_form').trigger('submit');
 	});
 
 	$('.next-button').click(function(){
+        //alert(parseInt($(this).closest('.flexigrid').find('.crud_page').val()) + 1 );
 		$(this).closest('.flexigrid').find('.crud_page').val( parseInt($(this).closest('.flexigrid').find('.crud_page').val()) + 1 );
-		$(this).closest('.flexigrid').find('.crud_page').trigger('change');
+		//$(this).closest('.flexigrid').find('.crud_page').trigger('change');
+        $(this).closest('.flexigrid').find('.filtering_form').trigger('submit');
 	});
 
 	$('.crud_page').change(function(){
@@ -263,7 +265,7 @@ function displaying_and_pages(this_container)
 	var per_page	 	= parseInt( this_container.find('.per_page').val(), 10 );
 	var total_items 	= parseInt( this_container.find('.total_items').html(), 10 );
 
-	this_container.find('.last-page-number').html( Math.ceil( total_items / per_page) );
+	this_container.find('#last-page-number-hidden').val( Math.ceil( total_items / per_page) );
 
 	if (total_items == 0) {
 		this_container.find('.page-starts-from').html( '0');

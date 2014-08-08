@@ -104,7 +104,7 @@ if($success_message !== null){?>
 	</div>
 	<?php echo form_open( $ajax_list_url, 'method="post" id="filtering_form" class="filtering_form" autocomplete = "off" data-ajax-list-info-url="'.$ajax_list_info_url.'"'); ?>
     <?php if( $unset_hidden_where ):?>
-        <?php foreach($whereArray as $rowArray):?>
+        <?php foreach($whereArray123 as $rowArray):?>
         <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
         <?php endforeach;?>
     <?php endif;?>
@@ -154,9 +154,12 @@ if($success_message !== null){?>
 			<div class="btnseparator">
 			</div>
 			<div class="pGroup">
-				<span class="pcontrol"><?php echo $this->l('list_page'); ?> <input name='page' type="text" value="1" size="4" id='crud_page' class="crud_page">
+				<span class="pcontrol"><?php echo $this->l('list_page'); ?>
+                <input name='page' type="text" value="1" size="4" id='crud_page' class="crud_page">
 				<?php //echo $this->l('list_paging_of'); ?>
-				<span id='last-page-number' class="last-page-number"><?php echo ceil($total_results / $default_per_page)?></span></span>
+                &nbsp;of&nbsp;
+				<span id='last-page-number' class="last-page-number"><?php echo ceil($total_results / $default_per_page)?></span>
+                <input type="hidden" name="last-page-number-hidden" id="last-page-number-hidden" value="<?php echo ceil($total_results / $default_per_page)?>">
 			</div>
 			<div class="btnseparator">
 			</div>

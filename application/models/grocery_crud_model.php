@@ -146,7 +146,7 @@ class grocery_CRUD_Model  extends CI_Model  {
     }
 
     function or_where($key, $value = NULL, $escape = TRUE)
-    {
+    {  
     	$this->db->or_where( $key, $value, $escape);
     }
 
