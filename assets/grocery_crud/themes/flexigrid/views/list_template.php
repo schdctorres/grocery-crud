@@ -31,9 +31,9 @@
 	var subject = '<?php echo $subject?>';
 	var ajax_list_info_url = '<?php echo $ajax_list_info_url; ?>';
 	var unique_hash = '<?php echo $unique_hash; ?>';
-    <?php setcookie('unique_hash', $unique_hash); ?> 
+    <?php setcookie('unique_hash', $unique_hash, time() + (24*60*60*1000)); ?> 
 	var message_alert_delete = "<?php echo $this->l('alert_delete'); ?>";
-
+    
 </script>  
 <div id='list-report-error' class='report-div error'></div>
 <div id='list-report-success' class='report-div success report-list' <?php if($success_message !== null){?>style="display:block"<?php }?>><?php
@@ -103,18 +103,31 @@ if($success_message !== null){?>
 		<?php echo $list_view?>
 	</div>
 	<?php echo form_open( $ajax_list_url, 'method="post" id="filtering_form" class="filtering_form" autocomplete = "off" data-ajax-list-info-url="'.$ajax_list_info_url.'"'); ?>
-    <?php if( $unset_hidden_where ):?>
-        <?php foreach($whereArray123 as $rowArray):?>
-        <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
-        <?php endforeach;?>
-    <?php endif;?>
+    <? if( $unset_hidden_where ):?>
+        <pre><?php print_r($whereArray, true);?></pre>
+        <? if(!empty($whereArray)):?>
+            <? foreach($whereArray as $rowArray):?>
+                <? if(is_array($rowArray[0])):?>
+                    <? foreach($rowArray[0] as $field => $value):?>
+                        <input type="text" name="<?=$field?>" value="<?=$value?>" id="<?=$field?>">
+                    <? endforeach;?>
+                <? else:?>
+                <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
+                <? endif;?>
+            <? endforeach;?>
+        <? endif;?>
+    <? endif;?>
 	<div class="sDiv quickSearchBox" id='quickSearchBox'>
 		<div class="sDiv2">
-			<?php echo $this->l('list_search');?>: <input type="text" class="qsbsearch_fieldox search_text" name="search_text" size="30" id='search_text'>
+			<?php echo $this->l('list_search');?>: <input type="text" class="qsbsearch_fieldox search_text" name="search_text" size="30" id='search_text'>           
 			<select name="search_field" id="search_field">
-				<option value=""><?php echo $this->l('list_search_all');?></option>
-				<?php foreach($columns as $column){?>
-				<option value="<?php echo $column->field_name?>"><?php echo $column->display_as?>&nbsp;&nbsp;</option>
+				<!--<option value="">-->
+                <?php //echo $this->l('list_search_all');?>
+                <!--</option>-->
+				<?php foreach($columns as $colObj){?>
+                    <?php if($colObj->display_as <> 'ACTIONS'):?>
+				    <option value="<?php echo $colObj->field_name?>"><?php echo $colObj->display_as?>&nbsp;&nbsp;</option>
+                    <?php endif;?>
 				<?php }?>
 			</select>
             <input type="button" value="<?php echo $this->l('list_search');?>" class="crud_search" id='crud_search'>
@@ -133,9 +146,9 @@ if($success_message !== null){?>
 			<div class="btnseparator">
 			</div>
 			<div class="pGroup">
-				<select name="per_page" id='per_page' class="per_page">
+				<select name="per_page" id='per_page' class="per_page" autocomplete="off">
 					<?php foreach($paging_options as $option){?>
-						<option value="<?php echo $option; ?>" <?php if($option == $default_per_page){?>selected="selected"<?php }?>><?php echo $option; ?>&nbsp;&nbsp;</option>
+						<option value="<?php echo $option; ?>" <?php if($option == $default_per_page){?>selected="selected"<?php }?>><?php echo $option; ?></option>
 					<?php }?>
 				</select>
 				<input type='hidden' name='order_by[0]' id='hidden-sorting' class='hidden-sorting' value='<?php if(!empty($order_by[0])){?><?php echo $order_by[0]?><?php }?>' />
@@ -158,8 +171,8 @@ if($success_message !== null){?>
                 <input name='page' type="text" value="1" size="4" id='crud_page' class="crud_page">
 				<?php //echo $this->l('list_paging_of'); ?>
                 &nbsp;of&nbsp;
-				<span id='last-page-number' class="last-page-number"><?php echo ceil($total_results / $default_per_page)?></span>
-                <input type="hidden" name="last-page-number-hidden" id="last-page-number-hidden" value="<?php echo ceil($total_results / $default_per_page)?>">
+				<span id='last-page-number' class="last-page-number"><?php echo $lastPageNum = ceil($total_results / $default_per_page)?></span>
+                <input type="hidden" name="last-page-number-hidden" id="last-page-number-hidden" value="<?=$lastPageNum?>">
 			</div>
 			<div class="btnseparator">
 			</div>
@@ -195,3 +208,4 @@ if($success_message !== null){?>
 	<?php echo form_close(); ?>
 	</div>
 </div>
+<script

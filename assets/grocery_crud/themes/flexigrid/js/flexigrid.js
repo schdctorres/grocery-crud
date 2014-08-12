@@ -26,9 +26,20 @@ $(function(){
 	call_fancybox();
 	add_edit_button_listener();
 
+
+    //console.log(readCookie('unique_hash'));
+    //console.log('crud page: ' + readCookie('crud_page_'+unique_hash));
+    
 	$('.filtering_form').submit(function(){
+        //console.log('filter form submitted');
+        //console.log('last page number: ' + $(this).closest('.flexigrid').find('#last-page-number-hidden').val());
+        //var last_page = 1;
+        
 		var crud_page =  parseInt($(this).closest('.flexigrid').find('.crud_page').val(), 10);
-		var last_page = parseInt($(this).closest('.flexigrid').find('#last-page-number-hidden').val(), 10);
+        if( !isNaN($('#last-page-number-hidden').val())){
+		    var last_page = parseInt($(this).closest('.flexigrid').find('#last-page-number-hidden').val(), 10);
+        }else{
+        }   var last_page = crud_page;
 
 		if (crud_page > last_page) {
 			$(this).closest('.flexigrid').find('.crud_page').val(last_page);
@@ -41,6 +52,11 @@ $(function(){
 
 		var ajax_list_info_url = $(this).attr('data-ajax-list-info-url');
 
+        //console.log('form submitted');
+        //console.log('crud_page ' + crud_page);
+        //console.log('last_page ' + last_page);
+        //console.log('submit to URL: ' + ajax_list_info_url);
+        
 		$(this).ajaxSubmit({
 			 url: ajax_list_info_url,
 			 dataType: 'json',
@@ -67,7 +83,8 @@ $(function(){
 		});
 
 		if ($('.flexigrid').length == 1) { //disable cookie storing for multiple grids in one page
-			createCookie('crud_page_'+unique_hash,crud_page,1);
+			createCookie('unique_hash_id',unique_hash,1);
+            createCookie('crud_page_'+unique_hash,crud_page,1);
 			createCookie('per_page_'+unique_hash,$('#per_page').val(),1);
 			createCookie('hidden_ordering_'+unique_hash,$('#hidden-ordering').val(),1);
 			createCookie('hidden_sorting_'+unique_hash,$('#hidden-sorting').val(),1);
@@ -119,8 +136,8 @@ $(function(){
 	$('.next-button').click(function(){
         //alert(parseInt($(this).closest('.flexigrid').find('.crud_page').val()) + 1 );
 		$(this).closest('.flexigrid').find('.crud_page').val( parseInt($(this).closest('.flexigrid').find('.crud_page').val()) + 1 );
-		//$(this).closest('.flexigrid').find('.crud_page').trigger('change');
-        $(this).closest('.flexigrid').find('.filtering_form').trigger('submit');
+		$(this).closest('.flexigrid').find('.crud_page').trigger('change');
+        //$(this).closest('.flexigrid').find('.filtering_form').trigger('submit');
 	});
 
 	$('.crud_page').change(function(){
@@ -239,8 +256,9 @@ $(function(){
 
 		if(cookie_crud_page !== null && cookie_per_page !== null)
 		{
-			$('#crud_page').val(cookie_crud_page);
-			$('#per_page').val(cookie_per_page);
+            
+			//$('#crud_page').val(cookie_crud_page);
+			//$('#per_page').val(cookie_per_page);
 			$('#hidden-ordering').val(hidden_ordering);
 			$('#hidden-sorting').val(hidden_sorting);
 			$('#search_text').val(cookie_search_text);
@@ -257,6 +275,7 @@ $(function(){
 
 function displaying_and_pages(this_container)
 {
+    
 	if (this_container.find('.crud_page').val() == 0) {
 		this_container.find('.crud_page').val('1');
 	}
@@ -265,7 +284,7 @@ function displaying_and_pages(this_container)
 	var per_page	 	= parseInt( this_container.find('.per_page').val(), 10 );
 	var total_items 	= parseInt( this_container.find('.total_items').html(), 10 );
 
-	this_container.find('#last-page-number-hidden').val( Math.ceil( total_items / per_page) );
+	//this_container.find('#last-page-number-hidden').val( Math.ceil( total_items / per_page) );
 
 	if (total_items == 0) {
 		this_container.find('.page-starts-from').html( '0');
