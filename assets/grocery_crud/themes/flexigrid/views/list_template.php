@@ -109,7 +109,7 @@ if($success_message !== null){?>
             <? foreach($whereArray as $rowArray):?>
                 <? if(is_array($rowArray[0])):?>
                     <? foreach($rowArray[0] as $field => $value):?>
-                        <input type="text" name="<?=$field?>" value="<?=$value?>" id="<?=$field?>">
+                        <input type="hidden" name="<?=$field?>" value="<?=$value?>" id="<?=$field?>">
                     <? endforeach;?>
                 <? else:?>
                 <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
