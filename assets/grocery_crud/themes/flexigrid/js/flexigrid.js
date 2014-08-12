@@ -197,7 +197,27 @@ $(function(){
 
 		return false;
 	});
+    
+    $('.ajax_list').on('click','.approve_button', function(){
+        var delete_url = $(this).attr('href');
 
+        var this_container = $(this).closest('.flexigrid');
+        
+        if( !confirm( "Are you sure you want to approve this exemption?" ) ){
+            return false;
+        }
+    });    
+
+    $('.ajax_list').on('click','.reject_button', function(){
+        var delete_url = $(this).attr('href');
+
+        var this_container = $(this).closest('.flexigrid');
+        
+        if( !confirm( "Are you sure you want to reject this exemption?" ) ){
+            return false;
+        }
+    });
+    
 	$('.export-anchor').click(function(){
 		var export_url = $(this).attr('data-url');
 
