@@ -316,5 +316,7 @@ function displaying_and_pages(this_container)
 		this_container.find('.page-ends-to').html( total_items );
 	} else {
 		this_container.find('.page-ends-to').html( crud_page*per_page );
+        var lastPage = (total_items / per_page);
+        this_container.find('.last-page-number').html( Math.ceil(lastPage.toFixed(2)) );
 	}
 }

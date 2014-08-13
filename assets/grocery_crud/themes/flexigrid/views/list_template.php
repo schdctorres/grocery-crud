@@ -168,10 +168,16 @@ if($success_message !== null){?>
 			</div>
 			<div class="pGroup">
 				<span class="pcontrol"><?php echo $this->l('list_page'); ?>
+                <?php $paging_end_results = ($total_results < $default_per_page ? $total_results : $default_per_page);?>
                 <input name='page' type="text" value="1" size="4" id='crud_page' class="crud_page">
 				<?php //echo $this->l('list_paging_of'); ?>
                 &nbsp;of&nbsp;
-				<span id='last-page-number' class="last-page-number"><?php echo $lastPageNum = ceil($total_results / $default_per_page)?></span>
+                <?php if($total_results < $default_per_page):?>
+                        <? $lastPageNum = 1;?>
+                <?php else:?>
+                        <? $lastPageNum = ceil($total_results/$paging_end_results); ?>
+                <?php endif;?>
+				<span id='last-page-number' class="last-page-number"><?=$lastPageNum;?></span>
                 <input type="hidden" name="last-page-number-hidden" id="last-page-number-hidden" value="<?=$lastPageNum?>">
 			</div>
 			<div class="btnseparator">
@@ -195,10 +201,11 @@ if($success_message !== null){?>
 			</div>
 			<div class="pGroup">
 				<span class="pPageStat">
+                    
 					<?php $paging_starts_from = "<span id='page-starts-from' class='page-starts-from'>1</span>"; ?>
-					<?php $paging_ends_to = "<span id='page-ends-to' class='page-ends-to'>". ($total_results < $default_per_page ? $total_results : $default_per_page) ."</span>"; ?>
-					<?php $paging_total_results = ""; //"<span id='total_items' class='total_items'>$total_results</span>"?>
-                    Displaying <?=$paging_starts_from?> to <?=$paging_ends_to?>
+					<?php $paging_ends_to = "<span id='page-ends-to' class='page-ends-to'>".$paging_end_results."</span>"; ?>
+					<?php $paging_total_results = "<span id='total_items' class='total_items'>".$total_results."</span>"?>
+                    Displaying <?=$paging_starts_from?> to <?=$paging_ends_to?> of <?=$paging_total_results?> Records
 				</span>
 			</div>
 		</div>
