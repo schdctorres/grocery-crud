@@ -313,6 +313,8 @@ function displaying_and_pages(this_container)
 	}
 
 	if (crud_page*per_page > total_items) {
+        var lastPage = 1;
+        this_container.find('.last-page-number').html( Math.ceil(lastPage.toFixed(2)) );
 		this_container.find('.page-ends-to').html( total_items );
 	} else {
 		this_container.find('.page-ends-to').html( crud_page*per_page );
