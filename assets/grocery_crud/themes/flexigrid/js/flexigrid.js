@@ -31,7 +31,7 @@ $(function(){
     //console.log('crud page: ' + readCookie('crud_page_'+unique_hash));
     
 	$('.filtering_form').submit(function(){
-        //console.log('filter form submitted');
+        console.log('filter form submitted');
         //console.log('last page number: ' + $(this).closest('.flexigrid').find('#last-page-number-hidden').val());
         //var last_page = 1;
         
@@ -52,7 +52,7 @@ $(function(){
 
 		var ajax_list_info_url = $(this).attr('data-ajax-list-info-url');
 
-        //console.log('form submitted');
+        //console.log('form submitted to:' + ajax_list_info_url);
         //console.log('crud_page ' + crud_page);
         //console.log('last_page ' + last_page);
         //console.log('submit to URL: ' + ajax_list_info_url);
@@ -69,6 +69,9 @@ $(function(){
 				 this_form.closest('.flexigrid').find('.ajax_refresh_and_loading').removeClass('loading');
 			 },
 			 success:    function(data){
+                console.log('total results: ' + data.total_results);
+
+                
 				this_form.closest('.flexigrid').find('.total_items').html( data.total_results);
 				displaying_and_pages(this_form.closest('.flexigrid'));
 
@@ -303,7 +306,9 @@ function displaying_and_pages(this_container)
 	var crud_page 		= parseInt( this_container.find('.crud_page').val(), 10) ;
 	var per_page	 	= parseInt( this_container.find('.per_page').val(), 10 );
 	var total_items 	= parseInt( this_container.find('.total_items').html(), 10 );
-
+    console.log('page: ' + crud_page);
+    console.log('per page: ' + per_page);
+    console.log('total: ' + total_items);
 	//this_container.find('#last-page-number-hidden').val( Math.ceil( total_items / per_page) );
 
 	if (total_items == 0) {

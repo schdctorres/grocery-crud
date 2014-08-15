@@ -104,7 +104,6 @@ if($success_message !== null){?>
 	</div>
 	<?php echo form_open( $ajax_list_url, 'method="post" id="filtering_form" class="filtering_form" autocomplete = "off" data-ajax-list-info-url="'.$ajax_list_info_url.'"'); ?>
     <? if( $unset_hidden_where ):?>
-        <pre><?php print_r($whereArray, true);?></pre>
         <? if(!empty($whereArray)):?>
             <? foreach($whereArray as $rowArray):?>
                 <? if(is_array($rowArray[0])):?>
