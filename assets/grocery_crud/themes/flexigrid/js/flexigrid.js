@@ -307,6 +307,7 @@ function displaying_and_pages(this_container)
 	var per_page	 	= parseInt( this_container.find('.per_page').val(), 10 );
 	var total_items 	= parseInt( this_container.find('.total_items').html(), 10 );
     console.log('page: ' + crud_page);
+    
     console.log('per page: ' + per_page);
     console.log('total: ' + total_items);
 	//this_container.find('#last-page-number-hidden').val( Math.ceil( total_items / per_page) );
@@ -317,13 +318,23 @@ function displaying_and_pages(this_container)
 		this_container.find('.page-starts-from').html( (crud_page - 1)*per_page + 1 );
 	}
 
-	if (crud_page*per_page > total_items) {
-        var lastPage = 1;
-        this_container.find('.last-page-number').html( Math.ceil(lastPage.toFixed(2)) );
-		this_container.find('.page-ends-to').html( total_items );
-	} else {
-		this_container.find('.page-ends-to').html( crud_page*per_page );
-        var lastPage = (total_items / per_page);
-        this_container.find('.last-page-number').html( Math.ceil(lastPage.toFixed(2)) );
-	}
+    var lastPage = (total_items / per_page);
+    lastPage = Math.ceil(lastPage.toFixed(2));
+    
+    if(crud_page == lastPage){
+        var lastPage = crud_page;
+        this_container.find('.page-ends-to').html( total_items );
+    } else{
+        if (crud_page*per_page > total_items) {
+            var lastPage = 1;
+            console.log('last page: ' + lastPage);
+		    this_container.find('.page-ends-to').html( total_items );
+	    } else {
+		    this_container.find('.page-ends-to').html( crud_page*per_page );
+            console.log('last page: ' + lastPage);
+	    }
+        
+    }
+    this_container.find('.last-page-number').html( lastPage );
+    console.log('last page: ' + lastPage);
 }

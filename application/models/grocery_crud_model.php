@@ -176,7 +176,7 @@ class grocery_CRUD_Model  extends CI_Model  {
     }
 
     function get_total_results()
-    {
+    { 
     	//set_relation_n_n special queries. We prefer sub queries from a simple join for the relation_n_n as it is faster and more stable on big tables.
     	if(!empty($this->relation_n_n))
     	{

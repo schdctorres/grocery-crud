@@ -171,10 +171,10 @@ if($success_message !== null){?>
                 <input name='page' type="text" value="1" size="4" id='crud_page' class="crud_page">
 				<?php //echo $this->l('list_paging_of'); ?>
                 &nbsp;of&nbsp;
-                <?php if($total_results < $default_per_page):?>
+                <?php if($paging_end_results < $default_per_page):?>
                         <? $lastPageNum = 1;?>
                 <?php else:?>
-                        <? $lastPageNum = ceil($total_results/$paging_end_results); ?>
+                        <? $lastPageNum = ceil($total_results/$paging_end_results); ?> 
                 <?php endif;?>
 				<span id='last-page-number' class="last-page-number"><?=$lastPageNum;?></span>
                 <input type="hidden" name="last-page-number-hidden" id="last-page-number-hidden" value="<?=$lastPageNum?>">
