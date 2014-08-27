@@ -62,6 +62,7 @@
 		</div>
 		<div class='form-button-box'>
 			<input type='button' value='<?php echo $this->l('form_cancel'); ?>' class="button btn btn-large" id="cancel-button" />
+            <input type='hidden' name='grocery_crud_form' value='true'>
 		</div>
 <?php 	} ?>
 		<div class='form-button-box'>

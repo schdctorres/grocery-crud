@@ -23,8 +23,8 @@
 
 	/** Jquery UI */
 	$this->load_js_jqueryui();
-
 ?>
+
 <script type='text/javascript'>
 	var base_url = '<?php echo base_url();?>';
 
@@ -103,18 +103,29 @@ if($success_message !== null){?>
 		<?php echo $list_view?>
 	</div>
 	<?php echo form_open( $ajax_list_url, 'method="post" id="filtering_form" class="filtering_form" autocomplete = "off" data-ajax-list-info-url="'.$ajax_list_info_url.'"'); ?>
-    <? if( $unset_hidden_where ):?>
-        <? if(!empty($whereArray)):?>
-            <? foreach($whereArray as $rowArray):?>
-                <? if(is_array($rowArray[0])):?>
-                    <? foreach($rowArray[0] as $field => $value):?>
-                        <input type="hidden" name="<?=$field?>" value="<?=$value?>" id="<?=$field?>">
-                    <? endforeach;?>
+    <? if( isset($unset_hidden_where) ): ?>
+        <? if(!empty($whereArray)): ?>
+            <? foreach($whereArray as $rowArray): ?>
+                <? if(is_array($rowArray)): ?>
+                    <? //foreach($rowArray as $field => $value):?>
+                        <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
+                    <? //endforeach;?>
                 <? else:?>
                 <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
                 <? endif;?>
             <? endforeach;?>
         <? endif;?>
+        <? if(!empty($orWhereArray)): ?>
+            <? foreach($orWhereArray as $rowArray): ?>
+                <? if(is_array($rowArray)): ?>
+                    <? //foreach($rowArray as $field => $value):?>
+                        <input type="text" name="orWhere[<?=$rowArray[0]?>]" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
+                    <? //endforeach;?>
+                <? else:?>
+                <input type="text" name="orWhere[<?=$rowArray[0]?>]" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
+                <? endif;?>
+            <? endforeach;?>
+        <? endif;?>        
     <? endif;?>
 	<div class="sDiv quickSearchBox" id='quickSearchBox'>
 		<div class="sDiv2">

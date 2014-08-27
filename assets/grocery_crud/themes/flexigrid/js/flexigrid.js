@@ -52,7 +52,7 @@ $(function(){
 
 		var ajax_list_info_url = $(this).attr('data-ajax-list-info-url');
 
-        //console.log('form submitted to:' + ajax_list_info_url);
+        console.log('form submitted to:' + ajax_list_info_url);
         //console.log('crud_page ' + crud_page);
         //console.log('last_page ' + last_page);
         //console.log('submit to URL: ' + ajax_list_info_url);
@@ -69,7 +69,9 @@ $(function(){
 				 this_form.closest('.flexigrid').find('.ajax_refresh_and_loading').removeClass('loading');
 			 },
 			 success:    function(data){
-                console.log('total results: ' + data.total_results);
+                $.each(data, function(key, element) {
+                    console.log('key: ' + key + '\n' + 'value: ' + element);
+                });
 
                 
 				this_form.closest('.flexigrid').find('.total_items').html( data.total_results);
@@ -148,6 +150,7 @@ $(function(){
 	});
 
 	$('.ajax_list').on('click','.field-sorting', function(){
+        
 		$(this).closest('.flexigrid').find('.hidden-sorting').val($(this).attr('rel'));
 
 		if ($(this).hasClass('asc')) {
