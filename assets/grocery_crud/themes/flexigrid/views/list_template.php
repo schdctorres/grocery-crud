@@ -107,11 +107,11 @@ if($success_message !== null){?>
         <? if(!empty($whereArray)): ?>
             <? foreach($whereArray as $rowArray): ?>
                 <? if(is_array($rowArray)): ?>
-                    <? //foreach($rowArray as $field => $value):?>
+                    <? if( !count(array_intersect(array_map('strtolower', explode(' ', $rowArray[0])), array("<",">","<>")))):?>
                         <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
-                    <? //endforeach;?>
+                    <? endif;?>
                 <? else:?>
-                <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
+                    <input type="hidden" name="<?=$rowArray[0]?>" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
                 <? endif;?>
             <? endforeach;?>
         <? endif;?>
