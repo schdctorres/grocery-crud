@@ -119,7 +119,7 @@ if($success_message !== null){?>
             <? foreach($orWhereArray as $rowArray): ?>
                 <? if(is_array($rowArray)): ?>
                     <? //foreach($rowArray as $field => $value):?>
-                        <input type="text" name="orWhere[<?=$rowArray[0]?>]" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
+                        <input type="hidden" name="orWhere[<?=$rowArray[0]?>]" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">
                     <? //endforeach;?>
                 <? else:?>
                 <input type="text" name="orWhere[<?=$rowArray[0]?>]" value="<?=$rowArray[1]?>" id="<?=$rowArray[0]?>">

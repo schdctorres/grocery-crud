@@ -485,7 +485,7 @@ class grocery_CRUD_Model  extends CI_Model  {
     {
     	$insert = $this->db->insert($this->table_name,$post_array);
     	if($insert)
-    	{
+    	{   
     		return $this->db->insert_id();
     	}
     	return false;

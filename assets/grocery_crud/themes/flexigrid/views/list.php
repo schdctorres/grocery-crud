@@ -64,7 +64,7 @@
 			<td class='<?php if(isset($order_by[0]) &&  $column->field_name == $order_by[0]){?>sorted<?php }?>'>
                 <? $value = $row->{$column->field_name};?> 
                 <? !empty($value) ? $value : '&nbsp;' ; ?>
-                <? $value===1 ? $value='<span class="glyphicon glyphicon-ok text-success"></span>' : $value ; ?>
+                <? /*$value===1 ? $value='<span class="glyphicon glyphicon-ok text-success"></span>' : $value ;*/ ?>
                 <? $value===0 ? $value='' : $value ; ?>
 				<div class='text-left'><?=$value?></div>
 			</td>
