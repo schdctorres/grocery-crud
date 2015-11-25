@@ -23,6 +23,7 @@ $(function(){
 
 	$('#crudForm').submit(function(){
 		var my_crud_form = $(this);
+		console.log('Submit to: ' + validation_url);
 
 		$(this).ajaxSubmit({
 			url: validation_url,
@@ -33,20 +34,24 @@ $(function(){
 			},
 			success: function(data){
 				$("#FormLoading").hide();
+				console.log( JSON.stringify(data) );
+
 				if(data.success)
 				{
 					$('#crudForm').ajaxSubmit({
 						dataType: 'text',
 						cache: 'false',
 						beforeSend: function(){
-							$("#FormLoading").show();
+							//$("#FormLoading").show();
 						},
 						success: function(result){
+							//console.log( JSON.stringify(result) );
+
                             if(result.statusText == "error"){
                                 window.location.replace("/authenticate");
                             } 
 							$("#FormLoading").fadeOut("slow");
-							data = $.parseJSON( result );
+							//data = $.parseJSON( result );
 							if(data.success)
 							{
 								var data_unique_hash = my_crud_form.closest(".flexigrid").attr("data-unique-hash");
@@ -55,7 +60,7 @@ $(function(){
 
 								if(save_and_close)
 								{
-                                    //alert(data.success_list_url)
+									console.log('Success url ' + data.success_list_url)
 									if ($('#save-and-go-back-button').closest('.ui-dialog').length === 0) {
 										window.location = data.success_list_url;
 									} else {
@@ -70,15 +75,16 @@ $(function(){
 							}
 							else
 							{
-                                alert( data.error_message );
+								console.log( data.error_message );
                                 form_error_message( data.error_message );
 							}
 						},
 						error: function(msg){
+							console.log( JSON.stringify(msg) );
                             if(msg.statusText == "error"){
                                 window.location.replace("/authenticate");
-                            }                             
-                            alert( message_insert_error );
+                            }
+							console.log( message_update_error );
 							form_error_message( message_update_error );
 						}
 					});
@@ -100,7 +106,7 @@ $(function(){
 				}
 			},
 			error: function(){
-				alert( message_update_error );
+				console.log( message_update_error );
 				$("#FormLoading").hide();
 
 			}
